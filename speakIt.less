@@ -1,17 +1,14 @@
-.speech-mic {
-	font-size:20px;
+.speakIt-mic {
 	margin-left:10px;
-	color:#3498db;
-	&.fa-microphone.recording {
-		color:#ef3e36;
+	background:url('img/speakIt.png') no-repeat 0 0;
+	width: 16px;
+	height: 23px;
+	background-size: 100%;
+	display: inline-block;
+	&.recording {
+		background-position: 0 -23px;
 		.objblink;
 	}
-}
-
-.speechTransition(@duration:0.2s, @ease:ease-out) {
-  -webkit-transition: all @duration @ease;
-  -moz-transition: all @duration @ease;
-  transition: all @duration @ease;
 }
 
 .speech-cont{
@@ -50,11 +47,11 @@
 }
 
 .objblink {
--webkit-transition: all 1s ease-in-out;
-    -moz-transition: all 1s ease-in-out;
-    -o-transition: all 1s ease-in-out;
-    -ms-transition: all 1s ease-in-out;
-    transition: all 1s ease-in-out;
+-webkit-transition: opacity 1s ease-in-out;
+    -moz-transition: opacity 1s ease-in-out;
+    -o-transition: opacity 1s ease-in-out;
+    -ms-transition: opacity 1s ease-in-out;
+    transition: opacity 1s ease-in-out;
     
     -webkit-animation-direction: normal;
     -webkit-animation-duration: 2s;

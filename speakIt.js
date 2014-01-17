@@ -26,12 +26,14 @@ spch.infoHtml = '<div class="speech-cont"><div id="speechInfo"> \
      Upgrade to <a href="//www.google.com/chrome">Chrome</a> \
      version 25 or later.</p> \
 </div> \
-<i class="speech-mic fa fa-microphone" onClick="spch.startButton(event);"></i> \
+<i class="speakIt-mic" onClick="spch.startButton(event);"></i> \
 </div>';
 
 spch.setUpSpeech = function() {
   var speechInputs = document.querySelectorAll('[data-speech]');
-  _.each(speechInputs, function(input) {
+  for (var i = 0, len = speechInputs.length; i < len; i++) 
+  {
+    var input = speechInputs[i];
     var setup = input.dataset.speech;
     var elementType = input.nodeName.toUpperCase();
     if(!setup && 
@@ -39,31 +41,35 @@ spch.setUpSpeech = function() {
     ) {
       spch.speechUI(input);
     }
-  })
+  }
+
   setTimeout(function(){spch.setUpSpeech()},500)
 }
 
 spch.speechUI = function(input) {
   if(spch.inputCnt === 0) {
-    $(input).parent().prepend(spch.infoHtml);
+    // var xmlString = spch.infoHtml,
+    //   parser = new DOMParser(), 
+    //   doc = parser.parseFromString(xmlString, "text/xml");
+    var doc2 = $(spch.infoHtml)[0];
+    input.parentElement.insertBefore(doc2, input)
     spch.showInfo('info_start');
   }
   spch.inputCnt++;
   var elementType = input.nodeName.toUpperCase();
-  $(input).width()
   input.dataset.speech = 'true';
 }
 
 spch.showInfo = function (s) {
-  speechInfo = $('#speechInfo')[0]
-  if (s  && !_.isUndefined(speechInfo) ) {
+  speechInfo = document.getElementById('speechInfo');
+  if (s && speechInfo !== undefined) {
     for (var child = speechInfo.firstChild; child; child = child.nextSibling) {
       if (child.style) {
         child.style.display = child.id == s ? 'inline' : 'none';
       }
     }
     speechInfo.style.visibility = 'visible';
-  } else if (!_.isUndefined(speechInfo)) {
+  } else if (speechInfo !== undefined) {
     speechInfo.style.visibility = 'hidden';
   }
 }
@@ -80,7 +86,7 @@ spch.startButton =  function (event) {
   spch.ignore_onend = false;
   spch.final_transcript = '';
   spch.showInfo('info_allow');
-  spch.recordingInput = $(event.target.parentElement).siblings("[data-speech=true]")[0];
+  spch.recordingInput = event.target.parentElement.nextSibling;
   spch.start_timestamp = event.timeStamp;
 }
 
@@ -96,7 +102,8 @@ if ('webkitSpeechRecognition' in window) {
   spch.recognition.onstart = function() {
     spch.recognizing = true;
     spch.showInfo('info_speak_now');
-    $('.speech-mic.fa-microphone').addClass('recording');
+    document.getElementsByClassName("speakIt-mic")[0].className += ' recording'
+    document.getE
   };
 
   spch.recognition.onerror = function(event) {
@@ -123,7 +130,7 @@ if ('webkitSpeechRecognition' in window) {
     if (spch.ignore_onend) {
       return;
     }
-    $('.speech-mic.fa-microphone').removeClass('recording');
+    document.getElementsByClassName("speakIt-mic")[0].className = "speakIt-mic";
     if (!spch.final_transcript) {
       spch.showInfo('info_start');
       return;
@@ -147,7 +154,7 @@ if ('webkitSpeechRecognition' in window) {
       spch.final_transcript = spch.linebreak(spch.capitalize(spch.final_transcript));
     }
     else {
-      $(spch.recordingInput).val(spch.linebreak(interim_transcript));
+      spch.recordingInput.value = spch.linebreak(interim_transcript);
     }
   };
 };
