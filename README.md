@@ -16,7 +16,7 @@ for angular,ng-route change but what about non angular apps?
 ###limitations:
 - uses webkitSpeechRecognition, so only works on chrome desktop and mobile browsers.
 
-###next stets:
+###next steps:
 - remove dependencies
 - remove infinite loop, if possible
 - make sure works with multiple input fields on a single page
